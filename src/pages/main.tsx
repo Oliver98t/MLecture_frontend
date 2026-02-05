@@ -7,149 +7,201 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 
 export default function MainPage() {
-  const markdown = String.raw`**# Projectile Motion — Notes**
+  const markdown = String.raw`# **Projectile Motion – Notes (Markdown + KaTeX)**
 
-**## Key Idea**
-Projectile motion is analysed by **separating horizontal and vertical components**.
-These components are **independent**, except for sharing the same **time** of travel.
+## **Key Idea**
+Projectile motion is split into **independent components**:
+- **Horizontal motion** → constant velocity
+- **Vertical motion** → accelerated motion under gravity
 
-**---**
+Time $t$ is **shared** between both components.
 
-**# Example 1 — Bob Runs Off a Cliff**
+---
 
-Bob runs horizontally off a **50 m** high cliff at **8 m/s**.
-We want the horizontal distance **$D$** he travels.
+# **Example: Bob Runs Off a 50 m Cliff**
 
-**---**
+Bob runs horizontally at $8\,\text{m/s}$ off a cliff of height $50\,\text{m}$.
+We want the horizontal distance $D$ travelled.
 
-**## Vertical Motion (Using SUVAT)**
+---
 
-Vertical displacement:
-- $s = 50\ \text{m}$ (downwards)
-- Initial vertical velocity: $u = 0$
-- Acceleration: $a = 9.8\ \text{m/s}^2$
-- Unknown: time $t$
+## **1. Vertical Motion (Using SUVAT)**
 
-Use
-$$s = ut + \tfrac{1}{2}at^2.$$
+Known quantities:
 
-Since $u=0$:
-$$s = \tfrac{1}{2}at^2$$
-$$2s = at^2$$
-$$t = \sqrt{\frac{2s}{a}}$$
-
-Plug in values:
-$$t = \sqrt{\frac{2(50)}{9.8}} = 3.19\ \text{s}.$$
-
-**---**
-
-**## Horizontal Motion**
-
-No air resistance → no horizontal forces → **constant speed**.
+- Displacement:
+  $s = 50\,\text{m}$
+- Initial vertical velocity:
+  $u = 0$
+- Acceleration due to gravity:
+  $a = 9.8\,\text{m/s}^2$
+- Time to fall: unknown
 
 Use
-$$\text{speed} = \frac{\text{distance}}{\text{time}}$$
-so
-$$D = vt.$$
-
-Thus:
-$$D = 8 \times 3.19 = 25.6\ \text{m}.$$
-
-**---**
-
-**# Final Impact Speed**
-
-Horizontal velocity:
-- $v_{x} = 8\ \text{m/s}$ (constant)
-
-Vertical final velocity using
-
 $$
-v_{y}^2 = u^2 + 2as
+s = ut + \frac{1}{2}at^{2}
 $$
 
-with $u = 0$:
+Since $u = 0$:
 
 $$
-v_{y} = \sqrt{2(9.8)(50)} = 31.3\ \text{m/s}.
+s = \frac{1}{2}at^{2}
 $$
 
-Total impact speed (Pythagoras):
+Solve for $t$:
 
 $$
-v = \sqrt{v_{x}^2 + v_{y}^2}
-= \sqrt{8^2 + 31.3^2}
-= 32.3\ \text{m/s}.
+t^{2} = \frac{2s}{a}
 $$
 
-Impact angle $\theta$ below horizontal:
-
 $$
-\theta = \tan^{-1}\left(\frac{v_{y}}{v_{x}}\right)
-= \tan^{-1}\left(\frac{31.3}{8}\right)
-= 75.7^\circ.
+t = \sqrt{\frac{2s}{a}}
 $$
 
-**---**
+Substitute $s=50$, $a=9.8$:
 
-**# Example 2 — Cannon Fired at an Angle**
+$$
+t = \sqrt{\frac{2 \cdot 50}{9.8}} = 3.19\,\text{s}
+$$
 
-A cannon fires a projectile at:
+---
 
-- Speed: $80\ \text{m/s}$
-- Launch angle: $30^\circ$
+## **2. Horizontal Motion**
 
-**## Resolve the Velocity**
+No air resistance → no horizontal forces → constant speed.
 
-Horizontal component:
-$$u_{x} = 80\cos 30^\circ.$$
+$$
+\text{distance} = \text{speed} \times t
+$$
 
-Vertical component:
-$$u_{y} = 80\sin 30^\circ.$$
+Horizontal speed is constant at $8\,\text{m/s}$:
 
-Numerically:
-- $u_{x} = 80\cos 30^\circ = 69.3\ \text{m/s}$
-- $u_{y} = 80\sin 30^\circ = 40\ \text{m/s}$
+$$
+D = 8 \times 3.19 = 25.6\,\text{m}
+$$
 
-**---**
+So Bob lands **25.6 m** from the cliff.
 
-**## Vertical Motion (Up and Down)**
+---
 
-Upwards is positive:
+# **Final Velocity When Bob Hits the Water**
 
-- Initial vertical velocity: $u_{y} = 40\ \text{m/s}$
-- Final vertical velocity on returning to launch height: $v_{y} = -40\ \text{m/s}$
-- Acceleration: $a = -9.8\ \text{m/s}^2$
+### **Horizontal component**
+$$
+v_{x} = 8\,\text{m/s}
+$$
 
-Use
-$$v = u + at$$
-to find total flight time.
+### **Vertical component**
+Use:
+$$
+v^{2} = u^{2} + 2as
+$$
 
-Since $v = -u$ for symmetric flight:
-$$-40 = 40 - 9.8t$$
-$$t = \frac{80}{9.8} = 8.16\ \text{s}.$$
+With:
+- $u = 0$
+- $a = 9.8$
+- $s = 50$
 
-**---**
+$$
+v = \sqrt{2as}
+$$
 
-**## Horizontal Range**
+$$
+v = \sqrt{2 \cdot 9.8 \cdot 50}
+= 31.3\,\text{m/s} \text{ (downwards)}
+$$
 
-Horizontal velocity is constant: $u_{x} = 69.3\ \text{m/s}$.
+### **Resultant speed**
+$$
+v_{\text{final}} = \sqrt{v_{x}^{2} + v_{y}^{2}}
+$$
 
-Horizontal distance:
-$$R = u_{x} t = 69.3 \times 8.16 = 565.5\ \text{m}.$$
+$$
+= \sqrt{8^{2} + 31.3^{2}}
+= 32.3\,\text{m/s}
+$$
 
-**---**
+### **Impact angle**
+Let $\theta$ be the angle below horizontal:
 
-**# Summary of Method**
+$$
+\tan \theta = \frac{v_{y}}{v_{x}}
+$$
 
-1. **Resolve** initial velocity into horizontal and vertical components.
-2. **Use SUVAT vertically** to find time, height, or vertical velocity.
-3. **Use constant horizontal speed** to find horizontal distance:
-   $$D = v_{x} t.$$
-4. For final speed, combine components with Pythagoras.
-5. For direction, use $\tan^{-1}(\frac{v_{y}}{v_{x}})$.
-`;
+$$
+\theta = \tan^{-1}\left(\frac{31.3}{8}\right) = 75.7^\circ
+$$
 
+---
+
+# **Launching at an Angle (General Case)**
+
+Suppose a projectile is launched at:
+- Speed $u$
+- Angle $\theta$ above the horizontal
+
+### **Resolve components**
+
+Turning *through* the angle → cosine
+Turning *away* → sine
+
+$$
+u_{x} = u \cos\theta
+$$
+
+$$
+u_{y} = u \sin\theta
+$$
+
+Horizontal motion has:
+
+$$
+a_{x} = 0
+$$
+
+Vertical motion has:
+
+$$
+a_{y} = -9.8\,\text{m/s}^{2}
+$$
+
+### **Example numbers**
+
+If $u = 80\,\text{m/s}$, $\theta = 30^\circ$:
+
+$$
+u_{x} = 80 \cos 30^\circ = 69.3\,\text{m/s}
+$$
+
+$$
+u_{y} = 80 \sin 30^\circ = 40\,\text{m/s}
+$$
+
+### **At top and returning to same height**
+
+Final vertical velocity:
+
+$$
+v_{y} = -u_{y}
+$$
+
+Use vertical SUVAT to find time, then horizontal motion for range.
+
+---
+
+# **Key Principles Summary**
+
+- Vertical and horizontal motions are independent.
+- Time $t$ always links the two.
+- Horizontal acceleration is zero (ideal model).
+- Vertical acceleration is $a = -9.8\,\text{m/s}^2$.
+- Resolve angles using:
+  - $u_{x} = u \cos\theta$
+  - $u_{y} = u \sin\theta$
+- Use SUVAT **only vertically**.`;
+/*
+Convert the following transcript, into notes using markdown with $...$ for inline and $$...$$ for block math suitable for KaTex, for subscript rendering use curly braces for multi-character subscripts (e.g., v_{x} (give the raw string)
+*/
   return (
     <DefaultLayout>
       <section className="flex flex-col items-center justify-center min-h-screen gap-4">
