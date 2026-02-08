@@ -1,4 +1,7 @@
+import { APIData } from "./APIData";
 import { useState, useEffect } from "react";
+import { CircularProgress } from "@heroui/progress";
+import { motion } from "framer-motion";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { button as buttonStyles } from "@heroui/theme";
@@ -9,56 +12,23 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 
-async function getNotes(noteId: string) {
-    const response = await fetch(
-        `http://localhost:8080/api/notes/get-notes/oli98/${noteId}`,
-        { method: "GET" }
-    );
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    var notesReady : boolean = false;
-    if(data.Notes != null)
-    {
-        notesReady = true;
-    }
-    return {notes: data.Notes, ready: notesReady};
-}
-
-async function createNotes(url: string) {
-    const response = await fetch(
-        "http://localhost:8080/api/notes/create-notes/oli98",
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ url }),
-        });
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    console.log(data);
-    return data.JobId;
-}
-
 export default function MainPage() {
     const [url, setUrl] = useState(""); // 1. State for input
     const [jobId, setJobId] = useState<string | null>(null);
-    const [notes, setNotes] = useState<string>("default");
+    const [notes, setNotes] = useState<string>("");
     const [isGetNotesDone, setIsGetNotesDone] = useState<boolean>(false);
+    var apiData = new APIData();
 
     useEffect(() => {
         const id = setInterval(async () => {
             if (jobId && !isGetNotesDone) {
-                const notesData = await getNotes(jobId);
+                const notesData = await apiData.getNotes(jobId, "oli98");
                 setIsGetNotesDone(notesData.ready);
                 if (notesData.notes != null) {
-                    setNotes(String.raw`${notesData.notes}`);
-                } else {
-                    setNotes("default");
+                    setNotes(String.raw`${notesData.notes}`.replace(/\u202F/g, " "));
+                }
+                else{
+                    console.log(notesData);
                 }
             }
         }, 1000);
@@ -70,7 +40,7 @@ export default function MainPage() {
         if (url.trim() !== "") {
             try {
                 setIsGetNotesDone(false);
-                const newJobId = await createNotes(url);
+                const newJobId = await apiData.createNotes(url, "oli98");
                 setJobId(newJobId);
             } catch (error) {
                 console.error(error);
@@ -101,12 +71,32 @@ export default function MainPage() {
                 </div>
                 <div className="w-full max-w-4xl mx-auto text-left justify-center">
                     <div className="prose max-w-4xl mx-auto">
-                        <ReactMarkdown
-                            rehypePlugins={[rehypeKatex]}
-                            remarkPlugins={[remarkMath, remarkGfm]}
-                        >
-                            {notes}
-                        </ReactMarkdown>
+                        {jobId && !isGetNotesDone ? (
+                            <div className="flex justify-center items-center py-8">
+                                                            <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1 }}
+                            >
+                                <CircularProgress size="lg" 
+                                label="Creating your notes..."
+                                />
+                            </motion.div>
+                            </div>
+                        ) : (
+                            <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 2 }}
+                            >
+                                <ReactMarkdown
+                                    rehypePlugins={[rehypeKatex]}
+                                    remarkPlugins={[remarkMath, remarkGfm]}
+                                >
+                                    {notes}
+                                </ReactMarkdown>
+                            </motion.div>
+                        )}
                     </div>
                 </div>
             </section>
