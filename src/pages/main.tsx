@@ -78,7 +78,7 @@ export default function MainPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 1 }}
                             >
-                                <CircularProgress size="lg" 
+                                <CircularProgress size="lg"
                                 label="Creating your notes..."
                                 />
                             </motion.div>
