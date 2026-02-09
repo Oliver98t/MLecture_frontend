@@ -2,7 +2,7 @@ export class APIData
 {
     baseUrl: string;
     apiKey: string = import.meta.env.VITE_MLECTURE_API_KEY;
-    isLocal: boolean = import.meta.env.VITE_LOCAL;
+    localBackend: boolean = import.meta.env.VITE_LOCAL;
 
     constructor()
     {
@@ -11,7 +11,7 @@ export class APIData
 
     async getNotes(noteId: string, user: string) {
         var url: string;
-        if(this.isLocal == true)
+        if(this.localBackend == true)
         {
             url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}`;
         }
@@ -35,7 +35,7 @@ export class APIData
     }
 
     async createNotes(url: string, user: string) {
-        if(this.isLocal == true)
+        if(this.localBackend == true)
         {
             url = `${this.baseUrl}/notes/create-notes/${user}`;
         }
