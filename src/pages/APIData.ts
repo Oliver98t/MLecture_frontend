@@ -7,6 +7,7 @@ export class APIData
     constructor()
     {
         this.baseUrl = "https://mlecture.azurewebsites.net/api";
+        console.log(this.localBackend);
     }
 
     async getNotes(noteId: string, user: string) {
