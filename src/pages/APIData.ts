@@ -26,6 +26,24 @@ export class APIData
         console.log(`local: ${this.localBackend}`);
     }
 
+    async loginUser(email: string, password: string) {
+        const url = `${this.baseUrl}/user/login`;
+        console.log(`login url: ${url}`);
+
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Email: email, Password: password }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }
+
     async getNotes(noteId: string, user: string) {
         var url: string;
         if(this.localBackend == "true")
