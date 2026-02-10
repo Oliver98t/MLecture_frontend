@@ -5,6 +5,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using Common;
 
@@ -13,6 +14,8 @@ namespace Company.Function;
 public class ProxyCalls
 {
     private readonly ILogger<ProxyCalls> _logger;
+    private readonly string baseUrl = "https://mlecture.azurewebsites.net/api";
+    private readonly string? apiKey = Environment.GetEnvironmentVariable("MLECTURE_API_KEY");
 
     public ProxyCalls(ILogger<ProxyCalls> logger)
     {
@@ -25,6 +28,30 @@ public class ProxyCalls
         public HttpResponseData? HttpResponse { get; set; }
     }
 
+    private async Task<string> CreateNotesAsync(string user, string youtubeUrl)
+    {
+        var url = $"{baseUrl}/notes/create-notes/{user}?code={apiKey}";
+
+        using var http = new HttpClient();
+        var payload = new { url = youtubeUrl };
+
+        using var response = await http.PostAsJsonAsync(url, payload);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync();
+    }
+
+    private async Task<string> GetNotesAsync(string user, string jobId)
+    {
+        var url = $"{baseUrl}/notes/get-notes/{user}/{jobId}?code={apiKey}";
+
+        using var http = new HttpClient();
+        using var response = await http.GetAsync(url);
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync();
+    }
+
     [Function("GetNotes")]
     public async Task<HttpResponseData> GetNotes(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "notes/get-notes/{user}/{jobId}")]
@@ -33,18 +60,13 @@ public class ProxyCalls
         var response = req.CreateResponse(HttpStatusCode.OK);
         response.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
-        string json = JsonSerializer.Serialize(
-            new
-                {
-                    User = user,
-                    Notes = "test"
-                });
-        await response.WriteStringAsync($"{json}\n");
+        string result = await GetNotesAsync(user, jobId);
+        await response.WriteStringAsync($"{result}\n");
         return response;
     }
 
     [Function("StartCreateNotes")]
-    public async Task<CreateNotesResponse> StartCreateNotes(
+    public async Task<HttpResponseData> StartCreateNotes(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "notes/create-notes/{user}")]
         HttpRequestData req, string user)
     {
@@ -52,8 +74,6 @@ public class ProxyCalls
         string requestBody = await reader.ReadToEndAsync();
         using var doc = JsonDocument.Parse(requestBody);
         var root = doc.RootElement;
-
-        string queueData;
         string url = string.Empty;
         var response = req.CreateResponse(HttpStatusCode.OK);
         response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
@@ -69,23 +89,14 @@ public class ProxyCalls
                 throw new Exception("The 'url' property is missing or null.");
             }
             _logger.LogInformation($"{url}");
-
-            var result = new StartCreateNotesQueueData(user, url, Guid.NewGuid().ToString());
-            string json = JsonSerializer.Serialize(result);
-            queueData = json;
-            await response.WriteStringAsync($"{json}\n");
         }
         catch(Exception e)
         {
             response = req.CreateResponse(HttpStatusCode.BadRequest);
-
-            queueData = QueueConsts.triggerFailMessage;
             _logger.LogInformation(e.Message);
         }
-
-        return new CreateNotesResponse()
-        {
-            HttpResponse = response
-        };
+        string apiCall = await CreateNotesAsync(user, url);
+        await response.WriteStringAsync($"{apiCall}\n");
+        return response;
     }
 }

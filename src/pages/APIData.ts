@@ -9,7 +9,7 @@ export class APIData
     {
         if(this.localBackend == "true")
         {
-            this.baseUrl ="http://localhost:7071/api"
+            this.baseUrl = "http://localhost:7071/api";
         }
         else
         {
