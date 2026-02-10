@@ -3,6 +3,7 @@ export class APIData
     baseUrl: string;
     apiKey: string = import.meta.env.VITE_MLECTURE_API_KEY;
     localBackend: string = import.meta.env.VITE_LOCAL;
+    proxy: string = import.meta.env.VITE_PROXY_BACKEND;
 
     constructor()
     {
@@ -25,7 +26,14 @@ export class APIData
         }
         else
         {
-            url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}?code=${this.apiKey}`;
+            if(this.proxy == "false")
+            {
+                url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}?code=${this.apiKey}`;
+            }
+            else
+            {
+                url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}`;
+            }
         }
         console.log(`get notes url: ${url}`);
         const response = await fetch(
@@ -51,7 +59,14 @@ export class APIData
         }
         else
         {
-            url = `${this.baseUrl}/notes/create-notes/${user}?code=${this.apiKey}`;
+            if(this.proxy == "false")
+            {
+                url = `${this.baseUrl}/notes/create-notes/${user}?code=${this.apiKey}`;
+            }
+            else
+            {
+                url = `${this.baseUrl}/notes/create-notes/${user}`;
+            }
         }
         console.log(`create notes url: ${url}`);
         const response = await fetch(

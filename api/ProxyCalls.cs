@@ -27,7 +27,7 @@ public class ProxyCalls
 
     [Function("GetNotes")]
     public async Task<HttpResponseData> GetNotes(
-        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "notes/get-notes/{user}/{jobId}")]
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "notes/get-notes/{user}/{jobId}")]
         HttpRequestData req, string user, string jobId)
     {
         var response = req.CreateResponse(HttpStatusCode.OK);
@@ -45,7 +45,7 @@ public class ProxyCalls
 
     [Function("StartCreateNotes")]
     public async Task<CreateNotesResponse> StartCreateNotes(
-        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "notes/create-notes/{user}")]
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "notes/create-notes/{user}")]
         HttpRequestData req, string user)
     {
         using var reader = new StreamReader(req.Body);
