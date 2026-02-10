@@ -9,12 +9,20 @@ export class APIData
     {
         if(this.localBackend == "true")
         {
-            this.baseUrl = "http://localhost:7071/api";
+            if(this.proxy == "false")
+            {
+                this.baseUrl = "http://localhost:8080/api";
+            }
+            else
+            {
+                this.baseUrl = "http://localhost:7071/api";
+            }
         }
         else
         {
             this.baseUrl ="/api";
         }
+        console.log(`proxy backend: ${this.proxy}`);
         console.log(`local: ${this.localBackend}`);
     }
 
