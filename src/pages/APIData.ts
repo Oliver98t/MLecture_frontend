@@ -2,17 +2,24 @@ export class APIData
 {
     baseUrl: string;
     apiKey: string = import.meta.env.VITE_MLECTURE_API_KEY;
-    localBackend: boolean = import.meta.env.VITE_LOCAL;
+    localBackend: string = import.meta.env.VITE_LOCAL;
 
     constructor()
     {
-        this.baseUrl = "https://mlecture.azurewebsites.net/api";
-        console.log(this.localBackend);
+        if(this.localBackend == "true")
+        {
+            this.baseUrl ="http://localhost:7071/api"
+        }
+        else
+        {
+            this.baseUrl ="/api";
+        }
+        console.log(`local: ${this.localBackend}`);
     }
 
     async getNotes(noteId: string, user: string) {
         var url: string;
-        if(this.localBackend == true)
+        if(this.localBackend == "true")
         {
             url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}`;
         }
@@ -20,6 +27,7 @@ export class APIData
         {
             url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}?code=${this.apiKey}`;
         }
+        console.log(`get notes url: ${url}`);
         const response = await fetch(
             url,
             { method: "GET" }
@@ -35,8 +43,9 @@ export class APIData
         return { notes: data.Notes, ready: notesReady };
     }
 
-    async createNotes(url: string, user: string) {
-        if(this.localBackend == true)
+    async createNotes(youtubeUrl: string, user: string) {
+        var url: string;
+        if(this.localBackend == "true")
         {
             url = `${this.baseUrl}/notes/create-notes/${user}`;
         }
@@ -44,14 +53,15 @@ export class APIData
         {
             url = `${this.baseUrl}/notes/create-notes/${user}?code=${this.apiKey}`;
         }
+        console.log(`create notes url: ${url}`);
         const response = await fetch(
-            `${this.baseUrl}/notes/create-notes/${user}?code=${this.apiKey}`,
+            url,
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ url }),
+                body: JSON.stringify({ url : youtubeUrl }),
             });
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
