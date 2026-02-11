@@ -5,12 +5,12 @@
       "allowedRoles": ["anonymous"]
     },
     {
-      "route": "/*",
-      "rewrite": "/index.html"
-    },
-    {
       "route": "/",
       "redirect": "/.auth/login/aad"
+    },
+    {
+      "route": "/*",
+      "rewrite": "/index.html"
     }
   ],
   "navigationFallback": {
