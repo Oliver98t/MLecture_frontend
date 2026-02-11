@@ -12,6 +12,29 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 
+async function getAuthInfo() {
+    try {
+        const response = await fetch('http://localhost:4280/.auth/me', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Include cookies for authentication
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('Error fetching auth data:', error);
+        throw error;
+    }
+}
+
 export default function MainPage() {
     const [url, setUrl] = useState(""); // 1. State for input
     const [jobId, setJobId] = useState<string | null>(null);
@@ -20,6 +43,7 @@ export default function MainPage() {
     var apiData = new APIData();
 
     useEffect(() => {
+        getAuthInfo();
         const id = setInterval(async () => {
             if (jobId && !isGetNotesDone) {
                 const notesData = await apiData.getNotes(jobId, "oli98");
@@ -27,7 +51,7 @@ export default function MainPage() {
                 if (notesData.notes != null) {
                     setNotes(String.raw`${notesData.notes}`.replace(/\u202F/g, " "));
                 }
-                else{
+                else {
                     console.log(notesData);
                 }
             }
@@ -49,7 +73,7 @@ export default function MainPage() {
     };
 
     return (
-        <DefaultLayout>
+        <DefaultLayout showLogout={true}>
             <section className="flex flex-col items-center justify-center min-h-screen gap-4">
                 <div className="w-full max-w-lg mx-auto flex gap-2 items-end justify-center">
                     <Input
@@ -73,21 +97,21 @@ export default function MainPage() {
                     <div className="prose max-w-4xl mx-auto">
                         {jobId && !isGetNotesDone ? (
                             <div className="flex justify-center items-center py-8">
-                                                            <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1 }}
-                            >
-                                <CircularProgress size="lg"
-                                label="Creating your notes..."
-                                />
-                            </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 1 }}
+                                >
+                                    <CircularProgress size="lg"
+                                        label="Creating your notes..."
+                                    />
+                                </motion.div>
                             </div>
                         ) : (
                             <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 2 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 2 }}
                             >
                                 <ReactMarkdown
                                     rehypePlugins={[rehypeKatex]}

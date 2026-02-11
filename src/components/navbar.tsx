@@ -7,7 +7,11 @@ import { button as buttonStyles } from "@heroui/theme";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { title } from "@/components/primitives";
 
-export const Navbar = () => {
+interface NavbarProps {
+  showLogout?: boolean;
+}
+
+export const Navbar = ({ showLogout = false }: NavbarProps) => {
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <div className="flex w-full items-center">
@@ -20,16 +24,18 @@ export const Navbar = () => {
         </div>
         {/* Right: actions */}
         <div className="flex-1 flex justify-end gap-2 hidden sm:flex">
-          <Button
-            className={buttonStyles({
-              color: "primary",
-              radius: "full",
-              variant: "shadow",
-            })}
-            onPress={() => window.location.href = "/.auth/logout"}
-          >
-            Log Out
-          </Button>
+          {showLogout && (
+            <Button
+              className={buttonStyles({
+                color: "primary",
+                radius: "full",
+                variant: "shadow",
+              })}
+              onPress={() => window.location.href = "/.auth/logout"}
+            >
+              Log Out
+            </Button>
+          )}
           <ThemeSwitch />
         </div>
       </div>

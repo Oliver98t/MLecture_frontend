@@ -1,13 +1,15 @@
 import { Navbar } from "@/components/navbar";
 
-export default function DefaultLayout({
-  children,
-}: {
+interface DefaultLayoutProps {
+  showLogout?: boolean;
   children: React.ReactNode;
-}) {
+}
+
+export default function DefaultLayout({showLogout = false, children}: DefaultLayoutProps)
+{
   return (
     <div className="relative flex flex-col h-screen">
-      <Navbar />
+      <Navbar showLogout={showLogout} />
       <main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
         {children}
       </main>

@@ -19,7 +19,7 @@ export default function Login() {
                         })}
                         onPress={() => window.location.href = "/.auth/login/aad?post_login_redirect_uri=/main"}
                     >
-                        Login
+                        Login via Microsoft account
                     </Button>
                 </div>
             </section>
