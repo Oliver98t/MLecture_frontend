@@ -5,8 +5,8 @@ import Login from "@/pages/login";
 function App() {
   return (
     <Routes>
-      <Route element={<Login />} path="/login" />
-      <Route element={<MainPage />} path="/" />
+      <Route element={<Login />} path="/" />
+      <Route element={<MainPage />} path="/test" />
     </Routes>
   );
 }

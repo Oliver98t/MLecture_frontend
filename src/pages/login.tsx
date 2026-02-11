@@ -36,11 +36,10 @@ export default function Login() {
                             radius: "full",
                             variant: "shadow",
                         })}
-                        //onPress={createNotesHandler}
+                        onPress={() => window.location.href = "/.auth/login/aad"}
                     >
                         Login
                     </Button>
-                    <a href="/.auth/login/aad">Login</a>
                 </div>
             </section>
         </DefaultLayout>
