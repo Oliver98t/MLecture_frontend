@@ -5,12 +5,16 @@
       "allowedRoles": ["anonymous"]
     },
     {
+      "route": "/login",
+      "allowedRoles": ["anonymous"]
+    },
+    {
       "route": "/",
-      "redirect": "/.auth/login/aad"
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/*",
-      "rewrite": "/index.html"
+      "allowedRoles": ["authenticated"]
     }
   ],
   "navigationFallback": {
@@ -27,7 +31,7 @@
   },
   "responseOverrides": {
     "401": {
-      "redirect": "/",
+      "redirect": "/login",
       "statusCode": 302
     }
   }
