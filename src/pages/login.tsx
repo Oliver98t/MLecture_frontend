@@ -17,7 +17,7 @@ export default function Login() {
                             radius: "full",
                             variant: "shadow",
                         })}
-                        onPress={() => window.location.href = "/.auth/login/aad"}
+                        onPress={() => window.location.href = "/.auth/login/aad?post_login_redirect_uri=/main"}
                     >
                         Login
                     </Button>
