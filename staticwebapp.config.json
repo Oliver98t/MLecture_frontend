@@ -1,26 +1,17 @@
 {
+  "navigationFallback": {
+    "rewrite": "/index.html"
+  },
   "routes": [
     {
-      "route": "/api/*",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/login",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/main",
-      "allowedRoles": ["authenticated"]
+      "route": "/*",
+      "allowedRoles": [ "authenticated" ]
     }
   ],
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/images/*.{png,jpg,jpeg,gif,webp}", "/css/*", "/js/*", "/api/*"]
-  },
   "responseOverrides": {
     "401": {
-      "redirect": "/login",
-      "statusCode": 302
+      "statusCode": 302,
+      "redirect": "/.auth/login/aad"
     }
   }
 }
