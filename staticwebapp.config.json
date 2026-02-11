@@ -5,11 +5,11 @@
 
   "routes": [
     {
-      "route": "/login",
+      "route": "/",
       "allowedRoles": [ "anonymous" ]
     },
     {
-      "route": "/*",
+      "route": "/main",
       "allowedRoles": [ "authenticated" ]
     }
   ],
