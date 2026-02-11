@@ -26,6 +26,7 @@ export const Navbar = () => {
               radius: "full",
               variant: "shadow",
             })}
+            onPress={() => window.location.href = "/.auth/logout"}
           >
             Log Out
           </Button>
