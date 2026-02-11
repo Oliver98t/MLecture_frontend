@@ -2,7 +2,7 @@ import { APIData } from "./APIData";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { button as buttonStyles } from "@heroui/theme";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DefaultLayout from "@/layouts/default";
 import "katex/dist/katex.min.css";
 
@@ -36,10 +36,11 @@ export default function Login() {
                             radius: "full",
                             variant: "shadow",
                         })}
-                        onPress={createNotesHandler}
+                        //onPress={createNotesHandler}
                     >
                         Login
                     </Button>
+                    <a href="/.auth/login/aad">Login</a>
                 </div>
             </section>
         </DefaultLayout>
