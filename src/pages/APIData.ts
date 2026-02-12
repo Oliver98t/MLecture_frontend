@@ -2,14 +2,14 @@ export class APIData
 {
     baseUrl: string;
     apiKey: string = import.meta.env.VITE_MLECTURE_API_KEY;
-    localBackend: string = import.meta.env.VITE_LOCAL_BACKEND;
-    proxyBackend: string = import.meta.env.VITE_PROXY_BACKEND;
+    static localBackend: string = import.meta.env.VITE_LOCAL_BACKEND;
+    static proxyBackend: string = import.meta.env.VITE_PROXY_BACKEND;
 
     constructor()
     {
-        if(this.localBackend == "true")
+        if(APIData.localBackend == "true")
         {
-            if(this.proxyBackend == "false")
+            if(APIData.proxyBackend == "false")
             {
                 this.baseUrl = "http://localhost:8080/api";
             }
@@ -22,8 +22,8 @@ export class APIData
         {
             this.baseUrl ="/api";
         }
-        console.log(`proxyBackend backend: ${this.proxyBackend}`);
-        console.log(`local: ${this.localBackend}`);
+        console.log(`proxyBackend backend: ${APIData.proxyBackend}`);
+        console.log(`local: ${APIData.localBackend}`);
     }
 
     async loginUser(email: string, password: string) {
@@ -46,13 +46,13 @@ export class APIData
 
     async getNotes(noteId: string, user: string) {
         var url: string;
-        if(this.localBackend == "true")
+        if(APIData.localBackend == "true")
         {
             url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}`;
         }
         else
         {
-            if(this.proxyBackend == "false")
+            if(APIData.proxyBackend == "false")
             {
                 url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}?code=${this.apiKey}`;
             }
@@ -79,13 +79,13 @@ export class APIData
 
     async createNotes(youtubeUrl: string, user: string) {
         var url: string;
-        if(this.localBackend == "true")
+        if(APIData.localBackend == "true")
         {
             url = `${this.baseUrl}/notes/create-notes/${user}`;
         }
         else
         {
-            if(this.proxyBackend == "false")
+            if(APIData.proxyBackend == "false")
             {
                 url = `${this.baseUrl}/notes/create-notes/${user}?code=${this.apiKey}`;
             }

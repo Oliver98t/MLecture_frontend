@@ -26,9 +26,16 @@ async function getAuthInfo(): Promise<string> {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        console
-        return data.clientPrincipal.userDetails;
+        var data: string;
+        if(APIData.localBackend == "true")
+        {
+            data = "oli1998t@test.com";
+        }
+        else
+        {
+            data  = await response.json();
+        }
+        return data;
     } catch (error) {
         console.error('Error fetching auth data:', error);
         throw error;
