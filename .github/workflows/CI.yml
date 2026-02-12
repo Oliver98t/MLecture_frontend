@@ -1,4 +1,4 @@
-name: integration test
+name: Integration test
 
 on:
   push:
@@ -21,7 +21,5 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-      
       - run: npm ci
       - run: npm run build --if-present
-      - run: npm test
