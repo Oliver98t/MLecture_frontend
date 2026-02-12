@@ -5,7 +5,6 @@ import DefaultLayout from "@/layouts/default";
 import "katex/dist/katex.min.css";
 
 export default function Login() {
-
     return (
         <DefaultLayout>
             <section className="flex flex-col items-center justify-center min-h-screen gap-4">
@@ -19,7 +18,7 @@ export default function Login() {
                         })}
                         onPress={() => window.location.href = "/.auth/login/aad?post_login_redirect_uri=/main"}
                     >
-                        Login via Microsoft account
+                        Sign in via Microsoft account
                     </Button>
                 </div>
             </section>

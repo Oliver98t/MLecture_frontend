@@ -12,9 +12,9 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import "katex/dist/katex.min.css";
 
-async function getAuthInfo() {
+async function getAuthInfo(): Promise<string> {
     try {
-        const response = await fetch('http://localhost:4280/.auth/me', {
+        const response = await fetch(`${window.location.origin}/.auth/me`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,8 +27,7 @@ async function getAuthInfo() {
         }
 
         const data = await response.json();
-        console.log(data);
-        return data;
+        return data.clientPrincipal.userDetails;
     } catch (error) {
         console.error('Error fetching auth data:', error);
         throw error;
@@ -36,14 +35,23 @@ async function getAuthInfo() {
 }
 
 export default function MainPage() {
-    const [url, setUrl] = useState(""); // 1. State for input
+    const [url, setUrl] = useState<string>("");
+    const [userEmail, setUserEmail] = useState<string>("");
     const [jobId, setJobId] = useState<string | null>(null);
     const [notes, setNotes] = useState<string>("");
     const [isGetNotesDone, setIsGetNotesDone] = useState<boolean>(false);
     var apiData = new APIData();
 
     useEffect(() => {
-        getAuthInfo();
+        const fetchAuth = async () => {
+            try {
+                const authData = await getAuthInfo();
+                setUserEmail(authData);
+            } catch (error) {
+                console.error('Auth error:', error);
+            }
+        };
+        fetchAuth();
         const id = setInterval(async () => {
             if (jobId && !isGetNotesDone) {
                 const notesData = await apiData.getNotes(jobId, "oli98");
@@ -56,7 +64,6 @@ export default function MainPage() {
                 }
             }
         }, 1000);
-
         return () => clearInterval(id);
     }, [jobId, isGetNotesDone]);
 
@@ -75,6 +82,13 @@ export default function MainPage() {
     return (
         <DefaultLayout showLogout={true}>
             <section className="flex flex-col items-center justify-center min-h-screen gap-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <span>signed in as: {userEmail}</span>
+                </motion.div>
                 <div className="w-full max-w-lg mx-auto flex gap-2 items-end justify-center">
                     <Input
                         label="YouTube URL"

@@ -3,7 +3,6 @@ import {
   Navbar as HeroUINavbar,
 } from "@heroui/navbar";
 import { button as buttonStyles } from "@heroui/theme";
-
 import { ThemeSwitch } from "@/components/theme-switch";
 import { title } from "@/components/primitives";
 
@@ -33,7 +32,7 @@ export const Navbar = ({ showLogout = false }: NavbarProps) => {
               })}
               onPress={() => window.location.href = "/.auth/logout"}
             >
-              Log Out
+              Sign Out
             </Button>
           )}
           <ThemeSwitch />
