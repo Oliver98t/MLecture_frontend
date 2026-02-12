@@ -27,6 +27,7 @@ async function getAuthInfo(): Promise<string> {
         }
 
         const data = await response.json();
+        console
         return data.clientPrincipal.userDetails;
     } catch (error) {
         console.error('Error fetching auth data:', error);
@@ -54,7 +55,7 @@ export default function MainPage() {
         fetchAuth();
         const id = setInterval(async () => {
             if (jobId && !isGetNotesDone) {
-                const notesData = await apiData.getNotes(jobId, "oli98");
+                const notesData = await apiData.getNotes(jobId, userEmail);
                 setIsGetNotesDone(notesData.ready);
                 if (notesData.notes != null) {
                     setNotes(String.raw`${notesData.notes}`.replace(/\u202F/g, " "));
@@ -71,7 +72,7 @@ export default function MainPage() {
         if (url.trim() !== "") {
             try {
                 setIsGetNotesDone(false);
-                const newJobId = await apiData.createNotes(url, "oli98");
+                const newJobId = await apiData.createNotes(url, userEmail);
                 setJobId(newJobId);
             } catch (error) {
                 console.error(error);

@@ -5,6 +5,7 @@ import DefaultLayout from "@/layouts/default";
 import "katex/dist/katex.min.css";
 
 export default function Login() {
+    // TODO add multiple sign in options
     return (
         <DefaultLayout>
             <section className="flex flex-col items-center justify-center min-h-screen gap-4">

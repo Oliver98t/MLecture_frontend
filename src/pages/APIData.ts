@@ -2,14 +2,14 @@ export class APIData
 {
     baseUrl: string;
     apiKey: string = import.meta.env.VITE_MLECTURE_API_KEY;
-    localBackend: string = import.meta.env.VITE_LOCAL;
-    proxy: string = import.meta.env.VITE_PROXY_BACKEND;
+    localBackend: string = import.meta.env.VITE_LOCAL_BACKEND;
+    proxyBackend: string = import.meta.env.VITE_PROXY_BACKEND;
 
     constructor()
     {
         if(this.localBackend == "true")
         {
-            if(this.proxy == "false")
+            if(this.proxyBackend == "false")
             {
                 this.baseUrl = "http://localhost:8080/api";
             }
@@ -22,7 +22,7 @@ export class APIData
         {
             this.baseUrl ="/api";
         }
-        console.log(`proxy backend: ${this.proxy}`);
+        console.log(`proxyBackend backend: ${this.proxyBackend}`);
         console.log(`local: ${this.localBackend}`);
     }
 
@@ -52,7 +52,7 @@ export class APIData
         }
         else
         {
-            if(this.proxy == "false")
+            if(this.proxyBackend == "false")
             {
                 url = `${this.baseUrl}/notes/get-notes/${user}/${noteId}?code=${this.apiKey}`;
             }
@@ -85,7 +85,7 @@ export class APIData
         }
         else
         {
-            if(this.proxy == "false")
+            if(this.proxyBackend == "false")
             {
                 url = `${this.baseUrl}/notes/create-notes/${user}?code=${this.apiKey}`;
             }
