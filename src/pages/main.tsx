@@ -33,10 +33,13 @@ async function getAuthInfo(): Promise<string> {
         }
         else
         {
-            data  = await response.json();
+            const resp  = await response.json();
+            data = resp.clientPrincipal.userDetails;
         }
         return data;
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error('Error fetching auth data:', error);
         throw error;
     }
