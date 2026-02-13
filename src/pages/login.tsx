@@ -29,17 +29,6 @@ export default function Login() {
                     >
                         Sign in via GitHub account
                     </Button>
-                    <Button
-                        className={buttonStyles({
-                            color: "primary",
-                            radius: "full",
-                            variant: "shadow",
-                        })}
-                        onPress={() => window.location.href = "/.auth/login/aad?post_login_redirect_uri=/main"}
-                    >
-                        Create Account
-                    </Button>
-
             </section>
         </DefaultLayout>
     );
